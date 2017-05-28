@@ -220,11 +220,10 @@ Print "[INFO] Response.json is ${RESPONSE_JSON}"
 
 SQL_FILE=$(mktemp --suffix=.sql)
 
-# echo -e $(jq '.responses[0].textAnnotations[0].description' "${RESPONSE_JSON}") | awk '
-cat >> "${LOG_FILE}"  <<EOF
+echo -e $(jq '.responses[0].textAnnotations[0].description' "${RESPONSE_JSON}") | awk '
 BEGIN {
     print "INSERT INTO DOC_DATA ("
-    print "rif_emisor_end"
+    print "rif_emisor_end,"
     print "rif_emisor,"
     print "razon_social_emisor,"
     print "numero_control,"
@@ -237,7 +236,7 @@ BEGIN {
     print "fecha_pedido,"
     print "base_imponible,"
     print "iva_doc,"
-    print "total_doc,"
+    print "total_doc"
     print ") VALUES ("
 }
 END {
@@ -255,7 +254,7 @@ NR==31 {print "'\''" $0 "'\'', "}
 NR==33 {print "'\''" $0 "'\'', "}
 NR==37 {print "'\''" $0 "'\''"}
 ' > "${SQL_FILE}"
-EOF
+
 
 Print "[ OK ] SQL Statement in $SQL_FILE"
 
